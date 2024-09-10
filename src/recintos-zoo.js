@@ -46,9 +46,6 @@ class RecintosZoo {
         const listaAnimal = this.animais[animal]; // informação do animal
         let espacoNecessario = listaAnimal.tamanho * quantidade; // espaço que animal ocupa
 
-        
-        //this.recintos[tamanho_total] - this.recintos[animais.quantidade] * listaAnimal.this.recintos.animais.especie;
-
         //analisando cada recinto
         this.recintos.forEach(recinto => {
 
@@ -57,26 +54,38 @@ class RecintosZoo {
                 return total + (this.animais[atual.especie].tamanho * atual.quantidade); 
             }, 0);
 
-            // espaço livre pra inserção de animais
-            const espacoDisponivel = recinto.tamanho_total - espacoOcupado;
+            // espaço livre antes da inserção de animais
+            let espacoDisponivel = recinto.tamanho_total - espacoOcupado;
             
-            // se da pra encaixar animal ou nao
-            let espacoSuficiente = espacoDisponivel >= espacoNecessario; 
 
             if((recinto.animais.length > 0) && (recinto.animais.some(a => a.especie !== animal)))
             {
-                espacoNecessario += 1;
-                espacoSuficiente = espacoDisponivel >= espacoNecessario;
+                espacoDisponivel -= 1;
             }
+
+            // se da pra encaixar animal ou nao
+            let espacoSuficiente = espacoDisponivel >= espacoNecessario; 
 
 
             //animais apenas no bioma apropriadoec
             const biomaApropriado = recinto.bioma.some(b => listaAnimal.bioma.includes(b));
 
 
+            const espacoRestante = espacoDisponivel - espacoNecessario;
+
+            // logica dos macacos carentes
+            if(animal === "MACACO" && quantidade === 1) {
+                biomaApropriado = recinto.animais.length > 0 // se tiver pelo menos um animal, sempre sera verdadeiro
+            }
+
+            // logica carnivoros
+
+
+
+            // logica hipopotamo
 
             if(espacoSuficiente && biomaApropriado) {
-                recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoDisponivel} total ${recinto.tamanho_total}`);
+                recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoRestante} total: ${recinto.tamanho_total})`);
             }
             
      
