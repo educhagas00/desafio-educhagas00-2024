@@ -68,7 +68,7 @@ class RecintosZoo {
 
 
             //animais apenas no bioma apropriadoec
-            const biomaApropriado = recinto.bioma.some(b => listaAnimal.bioma.includes(b));
+            let biomaApropriado = recinto.bioma.some(b => listaAnimal.bioma.includes(b));
 
 
             const espacoRestante = espacoDisponivel - espacoNecessario;
@@ -79,10 +79,31 @@ class RecintosZoo {
             }
 
             // logica carnivoros
+            const possuiCarnivoros = recinto.animais.some(a => this.animais[a.especie].carnivoro); // se tem carnivoros
+            
+            if (listaAnimal.carnivoro) { // se o animal é de fato carnivoro
+                // se houve qualquer animal diferente no recinto, nao adiciona
+                if(recinto.animais.some(a => a.especie !== animal)) { 
+                    biomaApropriado = false;
+                }
 
+            } else{
+                // se o animal não for carnivoro, porém possui carnivoros, não pode adicionar
+                if (possuiCarnivoros) {
+                    biomaApropriado = false;
+                }
+            }
 
 
             // logica hipopotamo
+            if(animal === "HIPOPOTAMO" && recinto.bioma === "savana" || recinto.bioma === "rio") {
+                const hipopotamo = true;
+                if(recinto.animais.especie !== "HIPOPOTAMO") {
+                    const hipopotamo = false;
+                }
+            }
+
+
 
             if(espacoSuficiente && biomaApropriado) {
                 recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoRestante} total: ${recinto.tamanho_total})`);
@@ -96,8 +117,6 @@ class RecintosZoo {
         }
 
         return { recintosViaveis };
-
-       
 
     }
     
