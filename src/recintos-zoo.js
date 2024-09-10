@@ -96,15 +96,25 @@ class RecintosZoo {
 
 
             // logica hipopotamo
-            if(animal === "HIPOPOTAMO" && recinto.bioma === "savana" || recinto.bioma === "rio") {
-                const hipopotamo = true;
-                if(recinto.animais.especie !== "HIPOPOTAMO") {
-                    const hipopotamo = false;
+            const temHipopotamo =  recinto.animais.some(a => this.animais[a.especie] === 'HIPOPOTAMO');
+            // se tem hipopotamos no recinto
+
+            if (animal === "HIPOPOTAMO") { // se o animal for um hipopotamo
+                // se houver animais no recinto diferente dele e não estiver em savana e rio
+                if(recinto.animais.some(a => a.especie !== animal) && (!recinto.bioma.includes('savana') || !recinto.bioma.includes('rio'))) {
+                    biomaApropriado = false;
                 }
+            }
+            // se o animal não for hipopotamo e tivermos hipos no recinto
+            else if(temHipopotamo) {
+                    // caso o recinto nao seja savana e rio, nao é um bioma apropriado
+                    if(!(recinto.bioma.includes('savana') && recinto.bioma.includes('rio'))) {
+                        biomaApropriado = false;
+                    }
             }
 
 
-
+            // se o recinto for viavel, adicionar no array 
             if(espacoSuficiente && biomaApropriado) {
                 recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoRestante} total: ${recinto.tamanho_total})`);
             }
